@@ -3,6 +3,7 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from auth.jwt_bearer import JWTBearer
 from database.db import initiate_database
 from database.initial_data import initiate_db
+from routes.posts import router as post_router
 from routes.user import router as user_router
 
 app = FastAPI()
@@ -30,3 +31,6 @@ async def initiate_data():
 
 
 app.include_router(user_router, tags=["User"], prefix="/user")
+app.include_router(
+    post_router, tags=["Post"], prefix="/post", dependencies=[Depends(token_listener)]
+)
